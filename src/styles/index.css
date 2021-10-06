@@ -13,4 +13,8 @@ input:focus-within ~ label {
   @apply text-blue-500;
 }
 
+span:hover ~ div {
+  @apply block;
+}
+
 @import 'tailwindcss/utilities';
