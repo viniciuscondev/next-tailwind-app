@@ -1,6 +1,16 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 
-/* Your own custom component styles */
+body {
+    @apply font-roboto;
+}
+
+input:focus-within ~ label, input:not(:placeholder-shown) ~ label {
+    @apply transform scale-75 -translate-y-6 text-blue-500;
+}
+
+input:focus-within ~ label {
+  @apply text-blue-500;
+}
 
 @import 'tailwindcss/utilities';
