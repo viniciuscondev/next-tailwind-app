@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import axios from 'axios';
 import { FiLogIn } from 'react-icons/fi';
-import router, { useRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
 import Input from '../components/Input';
 import Button from '../components/Button';
@@ -38,8 +38,7 @@ export default function Login() {
         if (response.data.jwt) {
             localStorage.setItem("token", response.data.jwt);
             alert('Usuário logado com sucesso!');
-            router.push('/dashboard');
-            
+            router.push('/dashboard');            
                    
         } else {
             console.log(response.data.message[0].messages[0].message);
@@ -52,10 +51,10 @@ export default function Login() {
 }
 
   return (
-    <div className="bg-blue-900 flex items-center justify-center w-full min-h-screen">
-      <main className="bg-white p-6 flex flex-col items-center rounded">
-        <h1 className="text-2xl">Login</h1>                
-        <form onSubmit={handleSubmit} className="flex flex-col">
+    <div className="sm:bg-blue-900 bg-white flex items-center justify-center w-full min-h-screen">
+      <main className="bg-white p-6 flex flex-col items-center rounded w-screen sm:w-96">
+        <h1 className="text-4xl sm:text-2xl">Login</h1>                
+        <form onSubmit={handleSubmit} className="flex flex-col w-5/6">
           <Input
             type="email"
             name="identifier"

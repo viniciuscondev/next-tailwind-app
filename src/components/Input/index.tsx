@@ -12,7 +12,7 @@ export default function Input({ type, name, placeholder, value, handleInputChang
     return (
         <div className="relative my-4 border-b-2 focus-within:border-blue-500">
             <input
-                className="block w-full appearance-none focus:outline-none bg-transparent text-lg"
+                className="block sm:w-full appearance-none focus:outline-none bg-transparent text-lg"
                 placeholder=" "
                 type={ `${type}` }
                 name={ `${name}` }
