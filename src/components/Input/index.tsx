@@ -3,7 +3,7 @@ interface InputProps {
     type: string,
     name: string,
     placeholder: string,
-    value?: string,
+    value?: string,    
     handleInputChange: Function
 }
 
@@ -15,7 +15,7 @@ export default function Input({ type, name, placeholder, value, handleInputChang
                 className="block sm:w-full appearance-none focus:outline-none bg-transparent text-lg"
                 placeholder=" "
                 type={ `${type}` }
-                name={ `${name}` }
+                name={ `${name}` }                
                 value={value}
                 onChange={event => { handleInputChange(event) }}
                 required

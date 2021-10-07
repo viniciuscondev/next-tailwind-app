@@ -1,13 +1,18 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { FiSettings, FiLogOut } from 'react-icons/fi';
+import { FiPlusSquare, FiTrash2 } from 'react-icons/fi';
 
 import Modal from '../components/Modal';
-import Button from '../components/Button';
+import TaskModal from '../components/TaskModal';
 import router from 'next/router';
+import Input from '../components/Input';
+import Button from '../components/Button';
 
 export default function Dashboard() {
     const [username, setUsername] = useState("");
+    const [tasks, setTasks] = useState([]);
+    const [newtask, setNewtask] = useState("");
+    const [userid, setUserid] = useState("");
 
     async function getProfileData() {
         try {
@@ -19,6 +24,7 @@ export default function Dashboard() {
             });            
                         
             setUsername(response.data.username);
+            setUserid(response.data.id);
         } catch (err) {
             console.error(err.message);
         }
@@ -29,6 +35,65 @@ export default function Dashboard() {
         localStorage.removeItem("token");
         router.push('/');
     };
+
+    async function getTasks() {
+        try {
+            
+            const response: any = await axios.get('http://localhost:1337/tasks/me', {
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.token
+                }
+            });
+
+            setTasks(response.data);
+
+        } catch (error) {
+            console.error(error.message);
+        }
+    }
+
+    async function deleteTask(task: any) {
+        
+        try {
+            
+            const response: any = await axios.delete(`http://localhost:1337/tasks?taskid=${task.id}`, {
+                headers: {                    
+                    Authorization: 'Bearer ' + localStorage.token
+                }
+            });
+
+            getTasks();
+
+        } catch (error) {
+            console.error(error);
+        }        
+    }
+
+    function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
+        setNewtask(event.target.value);
+    }
+
+    async function handleSubmit(event: React.FormEvent) {
+        event.preventDefault();
+
+        try {
+            
+            const response: any = await axios.post('http://localhost:1337/tasks', {
+                title: newtask,
+                userid: userid
+            },{
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.token
+                }
+            });
+
+            getTasks();
+            setNewtask("");
+
+        } catch (error) {
+            console.error(error);
+        }
+    }
     
     useEffect(() => {
         if(localStorage.token) {
@@ -39,9 +104,13 @@ export default function Dashboard() {
         }
     },[]);
 
+    useEffect(() => {
+        getTasks();
+    },[]);
+
     return (
-        <>
-            <nav className="flex sm:flex-row flex-col items-center justify-between bg-blue-900 p-4">
+        <main className="flex flex-col items-center">
+            <nav className="flex sm:flex-row w-screen flex-col items-center justify-between bg-blue-900 p-4">
                 <h1 className="text-4xl mb-3 sm:mb-0 sm:text-lg text-white">Dashboard</h1>
                 <div className="flex items-center justify-center">
                     <Modal />
@@ -54,7 +123,25 @@ export default function Dashboard() {
                     </button>
                 </div>
             </nav>
-            <p>Olá, {username}</p>
-        </>
+            <p className="self-start m-2 text-xl">Olá, {username}</p>
+            <form className="mb-10" onSubmit={handleSubmit}>
+                <Input type="text" name="newtask" value={newtask} placeholder="Nova tarefa" handleInputChange={handleInputChange} />
+                <Button width="120px" title="Enviar" icon={<FiPlusSquare />} />
+            </form>            
+            <section className="w-9/12">
+                <h2 className="text-4xl mb-4">Suas tarefas:</h2>
+                <ul>
+                    {tasks.map((task, index) => (
+                        <li key={index} className="border border-black p-1 rounded mb-2 flex justify-between">
+                            {task.title}
+                            <div>
+                                <button onClick={() => deleteTask(task)} className="bg-red-500 text-white p-1 rounded"><FiTrash2 /></button>
+                                <TaskModal task={task}/>                                
+                            </div>
+                        </li>
+                    ))}                                     
+                </ul>
+            </section>
+        </main>
     );
 }
