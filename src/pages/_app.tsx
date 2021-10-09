@@ -1,6 +1,7 @@
 import Head from 'next/head'
 import { AppProps } from 'next/app'
 import '../styles/index.css'
+import TaskProvider from '../context/Tasks';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -12,7 +13,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"></link>
       </Head>
-      <Component {...pageProps} />
+      <TaskProvider>
+        <Component {...pageProps} />
+      </TaskProvider>
     </>
   )
 }

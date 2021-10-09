@@ -7,10 +7,12 @@ import TaskModal from '../components/TaskModal';
 import router from 'next/router';
 import Input from '../components/Input';
 import Button from '../components/Button';
+import { useTasks } from '../context/Tasks';
+
 
 export default function Dashboard() {
     const [username, setUsername] = useState("");
-    const [tasks, setTasks] = useState([]);
+    const { tasks, getTasks } = useTasks();
     const [newtask, setNewtask] = useState("");
     const [userid, setUserid] = useState("");
 
@@ -35,22 +37,6 @@ export default function Dashboard() {
         localStorage.removeItem("token");
         router.push('/');
     };
-
-    async function getTasks() {
-        try {
-            
-            const response: any = await axios.get('http://localhost:1337/tasks/me', {
-                headers: {
-                    Authorization: 'Bearer ' + localStorage.token
-                }
-            });
-
-            setTasks(response.data);
-
-        } catch (error) {
-            console.error(error.message);
-        }
-    }
 
     async function deleteTask(task: any) {
         
@@ -105,10 +91,10 @@ export default function Dashboard() {
     },[]);
 
     useEffect(() => {
-        getTasks();
+        getTasks();        
     },[]);
 
-    return (
+    return (        
         <main className="flex flex-col items-center">
             <nav className="flex sm:flex-row w-screen flex-col items-center justify-between bg-blue-900 p-4">
                 <h1 className="text-4xl mb-3 sm:mb-0 sm:text-lg text-white">Dashboard</h1>
@@ -130,17 +116,23 @@ export default function Dashboard() {
             </form>            
             <section className="w-9/12">
                 <h2 className="text-4xl mb-4">Suas tarefas:</h2>
-                <ul>
-                    {tasks.map((task, index) => (
-                        <li key={index} className="border border-black p-1 rounded mb-2 flex justify-between">
-                            {task.title}
-                            <div>
-                                <button onClick={() => deleteTask(task)} className="bg-red-500 text-white p-1 rounded"><FiTrash2 /></button>
-                                <TaskModal task={task}/>                                
-                            </div>
-                        </li>
-                    ))}                                     
-                </ul>
+                {
+                    tasks.length > 0 ?
+                        <ul>
+                        {tasks.map((task, index) => (
+                            <li key={index} className="border border-black p-1 rounded mb-2 flex justify-between">
+                                {task.title}
+                                <div>
+                                    <button onClick={() => deleteTask(task)} className="bg-red-500 text-white p-1 rounded"><FiTrash2 /></button>
+                                    <TaskModal task={task}/>                                
+                                </div>
+                            </li>
+                        ))}                                     
+                        </ul>
+                    :
+                    <h1 className="text-xl">Nenhuma tarefa foi cadastrada ainda.</h1>
+                }
+                
             </section>
         </main>
     );

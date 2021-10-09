@@ -1,15 +1,15 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { FiEdit } from 'react-icons/fi';
-import { useRouter } from 'next/router';
+import { useTasks } from '../../context/Tasks';
 
 import Input from '../Input';
 
 export default function TaskModal(task: any) {  
-  const router = useRouter();
 
   const [showModal, setShowModal] = useState(false);
   const [newtask, setNewtask] = useState("");
+  const { getTasks } = useTasks();
  
   function handleInputChange(event: React.ChangeEvent<HTMLInputElement>) {
     setNewtask(event.target.value);
@@ -36,9 +36,8 @@ export default function TaskModal(task: any) {
         }
 
         setShowModal(false);
-        router.push('/');
-        router.back();
-        
+        getTasks();
+                
         
     } catch (error) {
         console.error(error);            
