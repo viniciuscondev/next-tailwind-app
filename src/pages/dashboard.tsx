@@ -9,6 +9,17 @@ import Input from '../components/Input';
 import Button from '../components/Button';
 import { useTasks } from '../context/Tasks';
 
+interface Response {
+    data?: {
+        username: string,
+        id: string
+    }
+}
+
+type task = {
+    id: number,
+    title: string
+}
 
 export default function Dashboard() {
     const [username, setUsername] = useState("");
@@ -19,11 +30,11 @@ export default function Dashboard() {
     async function getProfileData() {
         try {
 
-            const response: any = await axios.get('http://localhost:1337/users/me', {
+            const response: Response = await axios.get('http://localhost:1337/users/me', {
                 headers: {
                     Authorization: 'Bearer ' + localStorage.token
                 }
-            });            
+            });
                         
             setUsername(response.data.username);
             setUserid(response.data.id);
@@ -38,11 +49,11 @@ export default function Dashboard() {
         router.push('/');
     };
 
-    async function deleteTask(task: any) {
+    async function deleteTask(task: task) {
         
         try {
             
-            const response: any = await axios.delete(`http://localhost:1337/tasks?taskid=${task.id}`, {
+            await axios.delete(`http://localhost:1337/tasks?taskid=${task.id}`, {
                 headers: {                    
                     Authorization: 'Bearer ' + localStorage.token
                 }
@@ -64,7 +75,7 @@ export default function Dashboard() {
 
         try {
             
-            const response: any = await axios.post('http://localhost:1337/tasks', {
+            await axios.post('http://localhost:1337/tasks', {
                 title: newtask,
                 userid: userid
             },{
@@ -91,7 +102,7 @@ export default function Dashboard() {
     },[]);
 
     useEffect(() => {
-        getTasks();        
+        getTasks();             
     },[]);
 
     return (        
@@ -119,20 +130,19 @@ export default function Dashboard() {
                 {
                     tasks.length > 0 ?
                         <ul>
-                        {tasks.map((task, index) => (
+                        {tasks.map((task: task, index: number) => (
                             <li key={index} className="border border-black p-1 rounded mb-2 flex justify-between">
                                 {task.title}
                                 <div>
                                     <button onClick={() => deleteTask(task)} className="bg-red-500 text-white p-1 rounded"><FiTrash2 /></button>
-                                    <TaskModal task={task}/>                                
+                                    <TaskModal task={task}/>
                                 </div>
                             </li>
                         ))}                                     
                         </ul>
                     :
                     <h1 className="text-xl">Nenhuma tarefa foi cadastrada ainda.</h1>
-                }
-                
+                }                
             </section>
         </main>
     );

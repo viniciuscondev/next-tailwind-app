@@ -4,6 +4,19 @@ import { useRouter } from 'next/router';
 
 import Input from '../Input';
 
+interface Response {
+  status?: number,
+  data?: {
+    jwt?: string,
+    message?: [{
+      messages?: [{
+        id?: string,
+        message?: string
+      }]
+    }]
+  }
+}
+
 export default function Modal() {
   const router = useRouter();
 
@@ -18,7 +31,7 @@ export default function Modal() {
   async function handleDeleteAccount() {
     try {               
 
-      const response: any = await axios.delete('http://localhost:1337/users/me', {            
+      await axios.delete('http://localhost:1337/users/me', {            
             headers: {
               Authorization: 'Bearer ' + localStorage.token
           }         
@@ -39,7 +52,7 @@ export default function Modal() {
 
     try {               
 
-        const response: any = await axios.put('http://localhost:1337/users/me', {
+        const response: Response = await axios.put('http://localhost:1337/users/me', {
           password: password
         }, {            
               headers: {

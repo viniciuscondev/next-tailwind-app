@@ -7,6 +7,18 @@ import { useRouter } from 'next/router';
 import Input from '../components/Input';
 import Button from '../components/Button';
 
+interface Response {
+  data?: {
+    jwt?: string,
+    message?: [{
+      messages?: [{
+        id?: string,
+        message?: string
+      }]
+    }]
+  }
+}
+
 export default function Register() {
   const router = useRouter();
   
@@ -27,13 +39,15 @@ export default function Register() {
 
     try {
         
-        const data = { username, email, password };        
+        const userData = { username, email, password };        
 
-        const response: any = await axios.post('http://localhost:1337/auth/local/register', data, {
+        const response: Response = await axios.post('http://localhost:1337/auth/local/register', userData, {
             validateStatus: function (status) {
                 return status < 500;
               }
         });
+
+        console.log(response);
 
         if (response.data.jwt) {            
             alert("Conta criada com sucesso!");

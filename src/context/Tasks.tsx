@@ -9,14 +9,14 @@ export default function TaskProvider({ children }) {
     async function getTasks() {
         try {
             
-            const response: any = await axios.get('http://localhost:1337/tasks/me', {
+            const response = await axios.get('http://localhost:1337/tasks/me', {
                 headers: {
                     Authorization: 'Bearer ' + localStorage.token
                 }
             });
 
             setTasks(response.data);
-
+            
         } catch (error) {
             console.error(error.message);
         }

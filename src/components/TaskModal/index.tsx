@@ -5,7 +5,27 @@ import { useTasks } from '../../context/Tasks';
 
 import Input from '../Input';
 
-export default function TaskModal(task: any) {  
+interface Response {
+  status?: number,
+  data?: {
+    jwt?: string,
+    message?: [{
+      messages?: [{
+        id?: string,
+        message?: string
+      }]
+    }]
+  }
+}
+
+interface Props {
+  task: {
+    title: string,
+    id: number
+  }
+}
+
+export default function TaskModal({ task }: Props ) {
 
   const [showModal, setShowModal] = useState(false);
   const [newtask, setNewtask] = useState("");
@@ -19,9 +39,9 @@ export default function TaskModal(task: any) {
   async function updateTask(event: React.FormEvent) {
     event.preventDefault();
 
-    try {               
+    try {
 
-        const response: any = await axios.put(`http://localhost:1337/tasks?taskid=${task.task.id}`, {
+        const response: Response = await axios.put(`http://localhost:1337/tasks?taskid=${task.id}`, {
           newtask: newtask
         }, {            
               headers: {
