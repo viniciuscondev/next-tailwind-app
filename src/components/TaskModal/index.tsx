@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { FiEdit } from 'react-icons/fi';
 import { useTasks } from '../../context/Tasks';
+import toast from 'react-hot-toast';
 
 import Input from '../Input';
 
@@ -50,9 +51,9 @@ export default function TaskModal({ task }: Props ) {
         });
         
         if(response.status === 200) {
-          alert('Tarefa alterada com sucesso!');
+          toast.success('Tarefa alterada com sucesso!');
         } else {
-          alert(response.data.message[0].messages[0].message);
+          toast.error(response.data.message[0].messages[0].message);
         }
 
         setShowModal(false);

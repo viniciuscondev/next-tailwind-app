@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import toast from 'react-hot-toast';
 
 import Input from '../Input';
 
@@ -38,9 +39,9 @@ export default function Modal() {
 
       });
 
-      alert('Conta excluída com sucesso!');
+      toast.success('Conta excluída com sucesso!');
       localStorage.removeItem("token");
-      router.push('/');
+      setTimeout(() => { router.push('/'); }, 2000);
       
   } catch (error) {
       console.error(error);            
@@ -61,7 +62,8 @@ export default function Modal() {
         });
         
         if(response.status === 200) {
-          alert('Senha alterada com sucesso!');
+          setPassword("");
+          toast.success('Senha alterada com sucesso!');
       } else {
           alert(response.data.message[0].messages[0].message);
       }

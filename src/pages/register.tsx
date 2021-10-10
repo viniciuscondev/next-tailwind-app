@@ -3,6 +3,7 @@ import { useState } from 'react';
 import axios from 'axios';
 import { FiUserCheck } from 'react-icons/fi';
 import { useRouter } from 'next/router';
+import toast, { Toaster } from 'react-hot-toast';
 
 import Input from '../components/Input';
 import Button from '../components/Button';
@@ -47,16 +48,12 @@ export default function Register() {
               }
         });
 
-        console.log(response);
-
-        if (response.data.jwt) {            
-            alert("Conta criada com sucesso!");
-            router.push('/');
-            //toast.info("Login realizado com sucesso!", {position: toast.POSITION.TOP_CENTER});            
-        } else {
-            console.log(response.data.message[0].messages[0].message);
-            alert(response.data.message[0].messages[0].message);
-            //toast.error(response.data.error, {position: toast.POSITION.TOP_CENTER});
+        if (response.data.jwt) {
+            toast.success('Conta criada com sucesso!');
+            setTimeout(() => { router.push('/'); }, 3000);            
+                      
+        } else {            
+            toast.error(response.data.message[0].messages[0].message);                        
         }
     
         
@@ -67,6 +64,7 @@ export default function Register() {
 
   return (
     <div className="sm:bg-blue-900 bg-white flex items-center justify-center w-full min-h-screen">
+      <Toaster />
       <main className="bg-white p-6 flex flex-col items-center rounded w-screen sm:w-96">
         <h1 className="text-4xl sm:text-2xl">Registrar</h1>                
         <form onSubmit={handleSubmit} className="flex flex-col w-5/6">
@@ -96,7 +94,7 @@ export default function Register() {
               <Link href='/' ><span className="cursor-pointer text-blue-600">Já tem uma conta? Clique aqui para entrar</span></Link>
             </div>
         </form>
-      </main>
+      </main>       
     </div>
   )
 }

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { FiPlusSquare, FiTrash2 } from 'react-icons/fi';
+import toast, { Toaster } from 'react-hot-toast';
 
 import Modal from '../components/Modal';
 import TaskModal from '../components/TaskModal';
@@ -60,6 +61,7 @@ export default function Dashboard() {
             });
 
             getTasks();
+            toast.success('Tarefa apagada!');
 
         } catch (error) {
             console.error(error);
@@ -107,6 +109,7 @@ export default function Dashboard() {
 
     return (        
         <main className="flex flex-col items-center">
+            <Toaster />
             <nav className="flex sm:flex-row w-screen flex-col items-center justify-between bg-blue-900 p-4">
                 <h1 className="text-4xl mb-3 sm:mb-0 sm:text-lg text-white">Dashboard</h1>
                 <div className="flex items-center justify-center">
