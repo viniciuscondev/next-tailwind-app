@@ -1,12 +1,12 @@
 import Link from 'next/link';
 import { useState } from 'react';
-import axios from 'axios';
 import { FiLogIn } from 'react-icons/fi';
 import { useRouter } from 'next/router';
 import toast, { Toaster } from 'react-hot-toast';
 
 import Input from '../components/Input';
 import Button from '../components/Button';
+import api from '../services/api';
 
 interface Response {
   data?: {
@@ -42,7 +42,7 @@ export default function Login() {
         
         const data = { identifier, password };        
 
-        const response: Response = await axios.post('http://localhost:1337/auth/local', data, {
+        const response: Response = await api.post('auth/local', data, {
             validateStatus: function (status) {
                 return status < 500;
               }

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState } from 'react';
-import axios from 'axios';
+
+import api from '../services/api';
 
 const TaskContext = createContext(undefined);
 
@@ -9,7 +10,7 @@ export default function TaskProvider({ children }) {
     async function getTasks() {
         try {
             
-            const response = await axios.get('http://localhost:1337/tasks/me', {
+            const response = await api.get('tasks/me', {
                 headers: {
                     Authorization: 'Bearer ' + localStorage.token
                 }

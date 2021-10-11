@@ -1,9 +1,10 @@
 import { useState } from 'react';
-import axios from 'axios';
 import { useRouter } from 'next/router';
 import toast from 'react-hot-toast';
+import { FiX } from 'react-icons/fi';
 
 import Input from '../Input';
+import api from '../../services/api';
 
 interface Response {
   status?: number,
@@ -32,7 +33,7 @@ export default function Modal() {
   async function handleDeleteAccount() {
     try {               
 
-      await axios.delete('http://localhost:1337/users/me', {            
+      await api.delete('users/me', {            
             headers: {
               Authorization: 'Bearer ' + localStorage.token
           }         
@@ -53,7 +54,7 @@ export default function Modal() {
 
     try {               
 
-        const response: Response = await axios.put('http://localhost:1337/users/me', {
+        const response: Response = await api.put('users/me', {
           password: password
         }, {            
               headers: {
@@ -100,7 +101,7 @@ export default function Modal() {
                     onClick={() => setShowModal(false)}
                   >
                     <span className="text-red-500 ml-4 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      x
+                      <FiX />
                     </span>
                   </button>
                 </div>
@@ -136,7 +137,7 @@ export default function Modal() {
               </div>
             </div>
           </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+          <div className="opacity-75 fixed inset-0 z-40 bg-black"></div>
         </>
       ) : null}
     </>

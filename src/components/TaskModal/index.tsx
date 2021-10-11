@@ -1,10 +1,10 @@
 import { useState } from 'react';
-import axios from 'axios';
-import { FiEdit } from 'react-icons/fi';
+import { FiEdit, FiX } from 'react-icons/fi';
 import { useTasks } from '../../context/Tasks';
 import toast from 'react-hot-toast';
 
 import Input from '../Input';
+import api from '../../services/api';
 
 interface Response {
   status?: number,
@@ -42,7 +42,7 @@ export default function TaskModal({ task }: Props ) {
 
     try {
 
-        const response: Response = await axios.put(`http://localhost:1337/tasks?taskid=${task.id}`, {
+        const response: Response = await api.put(`tasks?taskid=${task.id}`, {
           newtask: newtask
         }, {            
               headers: {
@@ -67,7 +67,7 @@ export default function TaskModal({ task }: Props ) {
 
   return (
     <>
-      <button className="bg-green-700 text-white p-1 ml-1 rounded" onClick={() => setShowModal(true)}>
+      <button className="bg-green-500 text-white p-2 text-lg ml-1 rounded" onClick={() => setShowModal(true)}>
         <FiEdit />
       </button>
       {showModal ? (
@@ -88,34 +88,31 @@ export default function TaskModal({ task }: Props ) {
                     onClick={() => setShowModal(false)}
                   >
                     <span className="text-red-500 ml-4 h-6 w-6 text-2xl block outline-none focus:outline-none">
-                      x
+                      <FiX />
                     </span>
                   </button>
                 </div>
                 {/*body*/}
                 <div className="relative p-6 flex-auto">
-                <form onSubmit={updateTask} className="flex flex-col text-xl">                    
-                    <Input
-                        type="text"
-                        name="updatetask"                        
-                        placeholder="Novo valor"
-                        handleInputChange={handleInputChange}
-                    />
-                    <button
-                      className="bg-green-500 text-white active:bg-green-600 font-bold text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                      type="submit"
-                    >
-                    Enviar
-                    </button>
-                </form>                
-                </div>
-                {/*footer*/}
-                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">                  
+                  <form onSubmit={updateTask} className="flex flex-col text-xl">                    
+                      <Input
+                          type="text"
+                          name="updatetask"                        
+                          placeholder="Novo valor"
+                          handleInputChange={handleInputChange}
+                      />
+                      <button
+                        className="bg-green-500 text-white active:bg-green-600 font-bold text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                        type="submit"
+                      >
+                      Enviar
+                      </button>
+                  </form>                
                 </div>
               </div>
             </div>
           </div>
-          <div className="opacity-25 fixed inset-0 z-40 bg-black"></div>
+          <div className="opacity-75 fixed inset-0 z-40 bg-black"></div>
         </>
       ) : null}
     </>

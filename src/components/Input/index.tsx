@@ -10,7 +10,7 @@ interface InputProps {
 export default function Input({ type, name, placeholder, value, handleInputChange }: InputProps) {
         
     return (
-        <div className="relative my-4 border-b-2 focus-within:border-blue-500">
+        <div className="relative my-4 z-1 border-b-2 focus-within:border-blue-500">
             <input
                 className="block sm:w-full appearance-none focus:outline-none bg-transparent text-lg"
                 placeholder=" "
@@ -20,7 +20,7 @@ export default function Input({ type, name, placeholder, value, handleInputChang
                 onChange={event => { handleInputChange(event) }}
                 required
             />
-            <label className="absolute origin-0 top-0 duration-300 text-gray-500 text-lg">{ placeholder }</label>
+            <label className="absolute -z-1 origin-0 top-0 duration-300 text-gray-500 text-lg">{ placeholder }</label>
         </div>
     );
 }
