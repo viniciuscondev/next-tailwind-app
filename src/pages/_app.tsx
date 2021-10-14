@@ -2,6 +2,7 @@ import Head from 'next/head'
 import { AppProps } from 'next/app'
 import '../styles/index.css'
 import TaskProvider from '../context/Tasks';
+import { StylesProvider } from '@material-ui/core/styles';
 
 function MyApp({ Component, pageProps }: AppProps) {
   return (
@@ -13,9 +14,11 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet"></link>
       </Head>
-      <TaskProvider>
-        <Component {...pageProps} />        
-      </TaskProvider>
+      <StylesProvider injectFirst>
+        <TaskProvider>
+          <Component {...pageProps} />        
+        </TaskProvider>
+      </StylesProvider>
     </>
   )
 }

@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { FiLogIn } from 'react-icons/fi';
 import { useRouter } from 'next/router';
 import toast, { Toaster } from 'react-hot-toast';
+import { CircularProgress } from '@material-ui/core';
 
 import Input from '../components/Input';
 import Button from '../components/Button';
@@ -23,6 +24,8 @@ interface Response {
 export default function Login() {
 
   const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
   
   const [inputs, setInputs] = useState({
     identifier: "",
@@ -40,13 +43,17 @@ export default function Login() {
 
     try {
         
-        const data = { identifier, password };        
+        const data = { identifier, password };      
+        
+        setLoading(true);
 
         const response: Response = await api.post('auth/local', data, {
             validateStatus: function (status) {
                 return status < 500;
               }
         });
+
+        setLoading(false);
 
         if (response.data.jwt) {
             localStorage.setItem("token", response.data.jwt);
@@ -83,7 +90,7 @@ export default function Login() {
             placeholder="Senha"
             handleInputChange={handleInputChange}
           />                    
-          <Button margin="20px 0" title="Entrar" icon={<FiLogIn />} />
+          <Button margin="20px 0" title={loading ? <CircularProgress color="primary" size={24} /> : "Entrar"} icon={<FiLogIn />} />
           <div className="self-end">
             <Link href='/register'><span className="cursor-pointer text-blue-600">Criar nova conta</span></Link>
           </div>

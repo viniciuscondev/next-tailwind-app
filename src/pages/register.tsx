@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { FiUserCheck } from 'react-icons/fi';
 import { useRouter } from 'next/router';
 import toast, { Toaster } from 'react-hot-toast';
+import { CircularProgress } from '@material-ui/core';
 
 import Input from '../components/Input';
 import Button from '../components/Button';
@@ -21,7 +22,11 @@ interface Response {
 }
 
 export default function Register() {
+  
   const router = useRouter();
+
+  const [loading, setLoading] = useState(false);
+
   
   const [inputs, setInputs] = useState({
     username: "",
@@ -39,14 +44,18 @@ export default function Register() {
     event.preventDefault();
 
     try {
-        
-        const userData = { username, email, password };        
+      
+        const userData = { username, email, password };     
 
+        setLoading(true);
+      
         const response: Response = await api.post('auth/local/register', userData, {
             validateStatus: function (status) {
                 return status < 500;
               }
         });
+
+        setLoading(false);
 
         if (response.data.jwt) {
             toast.success('Conta criada com sucesso!');
@@ -89,7 +98,7 @@ export default function Register() {
                 placeholder="Senha"
                 handleInputChange={handleInputChange}
             />                    
-            <Button margin="20px 0" title="Cadastrar" icon={<FiUserCheck />} />
+            <Button margin="20px 0" title={loading ? <CircularProgress color="primary" size={24} /> : "Cadastrar"} icon={<FiUserCheck />} />
             <div className="self-end">
               <Link href='/' ><span className="cursor-pointer text-blue-600">Já tem uma conta? Clique aqui para entrar</span></Link>
             </div>

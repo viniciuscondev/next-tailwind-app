@@ -17,4 +17,8 @@ span:hover ~ div {
   @apply block;
 }
 
+.MuiCircularProgress-root {
+  @apply text-white;
+}
+
 @import 'tailwindcss/utilities';
